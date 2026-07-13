@@ -1,10 +1,10 @@
 package ru.inie.tool
 
 class PipelineStageExecutor {
-    private def script
-    
-    PipelineStageExecutor(def script) {
-        this.script = script
+    private PipelineContext context
+
+    PipelineStageExecutor(PipelineContext context) {
+        this.context = context
     }
     
     void executeCommitStages() {
@@ -30,9 +30,9 @@ class PipelineStageExecutor {
     }
     
     void executeDeployToDev() {
-        script.stage('Deploy to DEV') {
-            script.echo 'Deploying to development environment'
-            script.sh '''
+        context.stage('Deploy to DEV') {
+            context.echo 'Deploying to development environment'
+            context.sh '''
                 echo "Deploying application to DEV..."
                 # Здесь команды деплоя
             '''
@@ -40,9 +40,9 @@ class PipelineStageExecutor {
     }
     
     private void buildProject() {
-        script.stage('Build') {
-            script.echo 'Building project...'
-            script.sh '''
+        context.stage('Build') {
+            context.echo 'Building project...'
+            context.sh '''
                 echo "Running Maven build..."
                 mvn clean compile
             '''
@@ -50,9 +50,9 @@ class PipelineStageExecutor {
     }
     
     private void runUnitTests() {
-        script.stage('Unit Tests') {
-            script.echo 'Running unit tests...'
-            script.sh '''
+        context.stage('Unit Tests') {
+            context.echo 'Running unit tests...'
+            context.sh '''
                 echo "Running unit tests..."
                 mvn test
             '''
@@ -60,9 +60,9 @@ class PipelineStageExecutor {
     }
     
     private void runIntegrationTests() {
-        script.stage('Integration Tests') {
-            script.echo 'Running integration tests...'
-            script.sh '''
+        context.stage('Integration Tests') {
+            context.echo 'Running integration tests...'
+            context.sh '''
                 echo "Running integration tests..."
                 mvn verify -DskipUnitTests=true
             '''
@@ -70,9 +70,9 @@ class PipelineStageExecutor {
     }
     
     private void runStaticAnalysis() {
-        script.stage('Static Analysis') {
-            script.echo 'Running static analysis...'
-            script.sh '''
+        context.stage('Static Analysis') {
+            context.echo 'Running static analysis...'
+            context.sh '''
                 echo "Running SonarQube analysis..."
                 mvn sonar:sonar
             '''
@@ -80,9 +80,9 @@ class PipelineStageExecutor {
     }
     
     private void runPRSonarAnalysis(Map prInfo) {
-        script.stage('SonarQube PR Analysis') {
-            script.echo 'Running SonarQube PR decoration...'
-            script.sh """
+        context.stage('SonarQube PR Analysis') {
+            context.echo 'Running SonarQube PR decoration...'
+            context.sh """
                 echo "Running SonarQube PR analysis..."
                 mvn sonar:sonar \\
                     -Dsonar.pullrequest.branch=${prInfo.sourceBranch} \\
@@ -93,9 +93,9 @@ class PipelineStageExecutor {
     }
     
     private void runFullSonarAnalysis() {
-        script.stage('Full SonarQube Analysis') {
-            script.echo 'Running full SonarQube analysis...'
-            script.sh '''
+        context.stage('Full SonarQube Analysis') {
+            context.echo 'Running full SonarQube analysis...'
+            context.sh '''
                 echo "Running full SonarQube analysis..."
                 mvn sonar:sonar -Dsonar.qualitygate.wait=true
             '''
@@ -103,9 +103,9 @@ class PipelineStageExecutor {
     }
     
     private void checkMergeConflicts(Map prInfo) {
-        script.stage('Check Merge Conflicts') {
-            script.echo 'Checking for merge conflicts...'
-            script.sh """
+        context.stage('Check Merge Conflicts') {
+            context.echo 'Checking for merge conflicts...'
+            context.sh """
                 echo "Checking conflicts with target branch: ${prInfo.targetBranch}"
                 # Проверка на конфликты слияния
                 git fetch origin ${prInfo.targetBranch}
@@ -116,9 +116,9 @@ class PipelineStageExecutor {
     }
     
     private void generateReleaseNotes() {
-        script.stage('Generate Release Notes') {
-            script.echo 'Generating release notes...'
-            script.sh '''
+        context.stage('Generate Release Notes') {
+            context.echo 'Generating release notes...'
+            context.sh '''
                 echo "Generating release notes..."
                 git log --pretty=format:"- %s" $(git describe --tags --abbrev=0 HEAD^)..HEAD > release-notes.txt
             '''
