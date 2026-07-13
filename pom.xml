@@ -10,10 +10,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+        <!--    Maven properties    -->
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
-
+        <!--    Dependency versions    -->
         <groovy-all.version>5.0.7</groovy-all.version>
         <jenkins-core.version>2.545</jenkins-core.version>
         <workflow-cps.version>4315.va_e456c4e7f4f</workflow-cps.version>
@@ -23,22 +23,23 @@
         <objenesis.version>3.5</objenesis.version>
         <mockito-core.version>5.23.0</mockito-core.version>
         <jenkins-pipeline-unit.version>1.1</jenkins-pipeline-unit.version>
-
+        <!--    Plugin versions    -->
         <gmavenplus-plugin.version>5.1.0</gmavenplus-plugin.version>
         <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
     </properties>
 
     <dependencies>
         <!-- Source: https://mvnrepository.com/artifact/org.apache.groovy/groovy-all -->
+        <!-- Компилятор и стандартная библиотека Groovy для написания Jenkins Shared Library -->
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy-all.version}</version>
             <type>pom</type>
-<!--            <scope>compile</scope>-->
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-core -->
+        <!-- Базовые классы Jenkins: доступ к EnvVars, FilePath, утилитам Hudson -->
         <dependency>
             <groupId>org.jenkins-ci.main</groupId>
             <artifactId>jenkins-core</artifactId>
@@ -47,6 +48,7 @@
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-cps -->
+        <!-- Движок Pipeline: CPS-трансформация, сериализация состояния, поддержка node/stage/parallel -->
         <dependency>
             <groupId>org.jenkins-ci.plugins.workflow</groupId>
             <artifactId>workflow-cps</artifactId>
@@ -55,6 +57,7 @@
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-step-api -->
+        <!-- API для создания кастомных Pipeline-шагов (@Symbol, StepContext, StepExecution) -->
         <dependency>
             <groupId>org.jenkins-ci.plugins.workflow</groupId>
             <artifactId>workflow-step-api</artifactId>
@@ -62,8 +65,8 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Testing -->
         <!-- Source: https://mvnrepository.com/artifact/org.spockframework/spock-core -->
+        <!-- BDD-фреймворк: given/when/then, @Unroll, where, встроенные моки и data-driven тесты -->
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
@@ -72,6 +75,7 @@
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/cglib/cglib-nodep -->
+        <!-- Генерация прокси-классов для мокирования конкретных классов (а не только интерфейсов) -->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
@@ -80,6 +84,7 @@
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/org.objenesis/objenesis -->
+        <!-- Создание объектов без вызова конструктора для мокирования singleton/private классов -->
         <dependency>
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
@@ -87,8 +92,8 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mocking Jenkins objects -->
         <!-- Source: https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+        <!-- Продвинутое мокирование: проверка количества вызовов (1*), заглушки (>>), ArgumentCaptor -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -96,8 +101,8 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- For testing Jenkins Pipeline steps -->
         <!-- Source: https://mvnrepository.com/artifact/com.lesfurets/jenkins-pipeline-unit -->
+        <!-- Эмуляция Jenkins-окружения для тестирования Pipeline без реального сервера -->
         <dependency>
             <groupId>com.lesfurets</groupId>
             <artifactId>jenkins-pipeline-unit</artifactId>
@@ -109,6 +114,7 @@
     <build>
         <plugins>
             <!-- Source: https://mvnrepository.com/artifact/org.codehaus.gmavenplus/gmavenplus-plugin -->
+            <!-- Плагин для компиляции Groovy в Maven (замена groovy-eclipse-compiler) -->
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
@@ -145,6 +151,7 @@
                 </configuration>
             </plugin>
             <!-- Source: https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+            <!-- Плагин для запуска тестов: включает *Test.groovy и *Spec.groovy -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
